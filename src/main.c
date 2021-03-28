@@ -5,6 +5,8 @@
 
 #define USEFUL_WIDTH 1280
 #define USEFUL_HEIGHT 720
+#define STANDARD_EYE_DISTANCE 2500
+#define STANDARD_DEPTH_OF_VIEW 10000
 
 typedef struct{
 	GLdouble eye[3];
@@ -16,17 +18,17 @@ LookAt lookAt;
 GLfloat fov;
 
 void initialize(){
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	fov = 90;
+	fov = 60;
 
 	for(int i = 0; i < 3; i++){
-		lookAt.eye[i] = 100;
+		lookAt.eye[i] = 500;
 		lookAt.center[i] = 0;
 	}
-	lookAt.up[0] = USEFUL_WIDTH / 2;
-	lookAt.up[1] = USEFUL_HEIGHT;
-	lookAt.up[2] = 100;
+	lookAt.up[0] = 0;
+	lookAt.up[1] = 1;
+	lookAt.up[2] = 0;
 }
 
 GLdouble getUsefulAreaRatio(){
@@ -41,7 +43,7 @@ void camera(){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(fov, getUsefulAreaRatio(), 0.1, 500);
+	gluPerspective(fov, getUsefulAreaRatio(), 1, STANDARD_DEPTH_OF_VIEW);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -52,8 +54,18 @@ void camera(){
 void callback_draw(){
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glutWireSphere(50.0, 50, 100);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glutWireSphere(350, 50, 50);
+	/*
+	glBegin(GL_POLYGON);
+		glColor3f(1, 0, 0); // red
+		glVertex3f(50, 1, 0); // X
+		glColor3f(0, 1, 0); // green
+		glVertex3f(0, 50, 0); // Y
+		glColor3f(0, 0, 1); // blue
+		glVertex3f(0, 0, 50); // Z
+	glEnd();
+	*/
 
 	glutSwapBuffers();
  }
@@ -61,7 +73,7 @@ void callback_draw(){
 void callback_reshape(GLsizei width, GLsizei height){
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(0, USEFUL_WIDTH, 0, USEFUL_HEIGHT, 1, 1000); // left, right, bottom, top, nearVal, farVal
+    glFrustum(0, USEFUL_WIDTH, 0, USEFUL_HEIGHT, 1, STANDARD_DEPTH_OF_VIEW); // left, right, bottom, top, nearVal, farVal
 
     if(getWindowRatio() == getUsefulAreaRatio()){
         glViewport(0, 0, width, height);
@@ -82,13 +94,23 @@ void callback_reshape(GLsizei width, GLsizei height){
 }
 
 void callback_keyboardDownFunc(unsigned char key, GLint x, GLint y){
-	// lookAt test
+	
 	switch(key){
-		case('w'):
-			lookAt.eye[0] -= 5;
+		case('1'): // top vision
+			lookAt.eye[0] = 0;
+			lookAt.eye[1] = STANDARD_EYE_DISTANCE;
+			lookAt.eye[2] = 0.01;
 		break;
-		case('s'):
-			lookAt.eye[0] += 5;
+		case('2'): // side view
+			lookAt.eye[0] = 0;
+			lookAt.eye[1] = 0;
+			lookAt.eye[2] = STANDARD_EYE_DISTANCE;
+		break;
+		case('r'):
+		case('R'): // lookAt test
+			lookAt.eye[0] = 500;
+			lookAt.eye[1] = 500;
+			lookAt.eye[2] = 500;
 		break;
 	}
 }
@@ -102,7 +124,7 @@ void callback_timerFunc(int msecs){
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA | GLUT_DEPTH);
 
 	glutInitWindowSize(800, 450);
 	glutInitWindowPosition(0, 0);
@@ -112,7 +134,7 @@ int main(int argc, char** argv){
 	glutReshapeFunc(callback_reshape);
 	glutKeyboardFunc(callback_keyboardDownFunc);
 
-	glutTimerFunc(0, callback_timerFunc, 30);
+	glutTimerFunc(0, callback_timerFunc, 60);
 
 	initialize();
 
