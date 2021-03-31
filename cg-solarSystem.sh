@@ -11,7 +11,7 @@ clear
 echo -e "\nCarregando o Sistema Solar..."
 
 echo -e "\n\tCompilando src/libs/celestial.c"
-gcc -c -o src/libs/celestial.o src/libs/celestial.c -lGL -lGLEW -lglut -lSOIL
+gcc -c -o src/libs/celestial.o src/libs/celestial.c -lGL -lGLEW -lglut -lSOIL -lm
 if [ $? -ne 0 ]; then
     deleteFiles
     exit 1
@@ -26,7 +26,7 @@ fi
 
 
 echo -e "\n\tCompilando src/main.c"
-gcc -o src/cg-solarSystem.out src/main.c src/libs/celestial.o src/libs/textures.o -lGL -lGLEW -lglut -lGLU
+gcc -o src/cg-solarSystem.out src/main.c src/libs/celestial.o src/libs/textures.o -lGL -lGLEW -lglut -lGLU -lm
 if [ $? -ne 0 ]; then
     deleteFiles
     exit 1
