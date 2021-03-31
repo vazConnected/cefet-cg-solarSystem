@@ -1,15 +1,17 @@
-#include "headers/celestial.h"
-
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <SOIL/SOIL.h>
+
+#include "headers/celestial.h"
+#include "headers/textures.h"
 
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
 
-void buildCelestial(Celestial *cel, int x, int y, int z, int rx, int rz,
+void buildCelestial(Celestial* cel, int x, int y, int z, int rx, int rz,
                      int posx, int posy, int posz,
-                     int radius, float rot, float trans ){
+                     int radius, float rot, float trans, char* caminho ){
 
     cel->orbitcx = x;
     cel->orbitcy = y;
@@ -23,42 +25,74 @@ void buildCelestial(Celestial *cel, int x, int y, int z, int rx, int rz,
     cel->velRotation = rot;
     cel->velTranslation = trans;
     cel->restartT = 0.0;
+    cel->textura = carregaTextura(caminho);
+}
 
+void solidSphere(int radius, int stacks, int columns){
+
+    // função retirada do exemplo "mapeamento"
+    GLUquadric* quadObj = gluNewQuadric();
+    gluQuadricDrawStyle(quadObj, GLU_FILL);
+    gluQuadricNormals(quadObj, GLU_SMOOTH);
+    gluQuadricTexture(quadObj, GL_TRUE);
+    gluSphere(quadObj, radius, stacks, columns);
+    gluDeleteQuadric(quadObj);
 }
 
 void drawCelestials(){
+
+    // draw the sun
+    glPushMatrix();
+     glTranslated(sun.posx, sun.posy, sun.posz);
+     glRotatef(sun.velRotation, 0, 1, 0);
+     desenhaCena(sun.textura, sun.radius, 30);
+    glPopMatrix();
+    
+    // draw the rings
+    for(int i = jupiter-1; i < nepturne; i++){
+        glPushMatrix();
+        if( i == nepturne -1 ){
+             glRotatef(10, 0, 0, 1); // nepturne's move is inclined
+             glColor3f(1.0f, 1.0f, 1.0f);
+        }
+        else if( i == saturn-1 ) glColor3f(0.9f, 0.8f, 0.0f);
+        else if( i == uranus-1 ) glColor3f(0.0f, 0.8f, 0.9f);
+        else glColor3f(0.9f, 0.5f, 0.0f);
+        glTranslatef(planets[i].posx,planets[i].posy, planets[i].posz-1);
+        glRotatef(planets[i].velRotation,1,1,1);
+        glutSolidTorus(5,(planets[i].radius)+20, 20, 40);
+        glPopMatrix();
+    }
+
     // draw the planets
     for(int i = 0; i < nepturne; i++){
         glPushMatrix();
-         glColor3f(i/(i+1.5), i/(i+0.9), 1.0f);
          if( i == nepturne - 1) glRotatef(10, 0, 0, 1); // nepturne's move is inclined
          glTranslatef(planets[i].posx, planets[i].posy, planets[i].posz);
          glRotatef(planets[i].velRotation, 0, 1, 0);
-         glutWireSphere(planets[i].radius, 30, 30);
+         desenhaCena(planets[i].textura, planets[i].radius, 30);
         glPopMatrix();
     }
+
+    // draw atmosphere
+    glPushMatrix();
+     glTranslated(planets[earth-1].posx, planets[earth-1].posy, planets[earth-1].posz);
+     glRotatef(planets[earth-1].velRotation, 0, 1, 1);
+     desenhaCena(atmosphere, planets[earth-1].radius+5, 30);
+    glPopMatrix();
 
     // draw the satellites
     for(int i = 0; i < deimos; i++){
         glPushMatrix();
-         glColor3f(0.3*i, 1.0f, 1.0f);
          glTranslatef(satellites[i].posx, satellites[i].posy, satellites[i].posz);
          glRotatef(satellites[i].velRotation, 0, 1, 0);
-         glutWireSphere(satellites[i].radius, 30, 30);
+         desenhaCena(satellites[i].textura, satellites[i].radius, 30);
         glPopMatrix();
     }
-
-    // draw the sun
-    glColor3f(0.9f, 0.9f, 0.0f);
-    glPushMatrix();
-     glTranslated(sun.posx, sun.posy, sun.posz);
-     glRotatef(sun.velRotation, 0, 1, 0);
-     glutWireSphere(sun.radius, 30, 30);
-    glPopMatrix();
-
 }
 
 void drawOrbits(){
+
     // planets
     glPushMatrix();
     for(int i = 0; i < nepturne; i++){
@@ -94,11 +128,10 @@ void drawOrbits(){
             }
         glEnd();
     }
-
-
 }
 
 void moveCelestials(){
+
     // planets are translated and rotated
     for(int i = 0; i < nepturne; i++){
         float angulo;

@@ -26,7 +26,7 @@ fi
 
 
 echo -e "\n\tCompilando src/main.c"
-gcc -o src/cg-solarSystem.out src/main.c src/libs/celestial.o src/libs/textures.o -lGL -lGLEW -lglut -lGLU -lm
+gcc -o src/cg-solarSystem.out src/main.c src/libs/celestial.o src/libs/textures.o -lGL -lGLEW -lglut -lGLU -lSOIL -lm
 if [ $? -ne 0 ]; then
     deleteFiles
     exit 1

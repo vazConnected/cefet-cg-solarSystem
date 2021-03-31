@@ -5,13 +5,6 @@
 enum orbes{mercury = 1, venus, earth, mars, jupiter, saturn, uranus, nepturne};
 enum naturalSatellites{moon = 1, phobos, deimos}; // Only Earth and Mars
 
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-
 #define MAX_LADOS 40
 
 typedef struct{
@@ -27,15 +20,19 @@ typedef struct{
     GLint posy;
     GLint posz;
     GLfloat restartT;
+    GLuint textura;
 } Celestial;
+
+GLuint atmosphere;
 
 Celestial planets[8];
 Celestial satellites[3];
 Celestial sun;
 
-void buildCelestial(Celestial *cel, int x, int y, int z, int rx, int ry,
+void buildCelestial(Celestial* cel, int x, int y, int z, int rx, int ry,
                      int posx, int posy, int posz,
-                     int radius, float rot, float trans);
+                     int radius, float rot, float trans, char* caminho);
+void solidSphere(int radius, int stacks, int columns);
 void drawCelestials();
 void drawOrbits();
 void moveCelestials();
