@@ -23,8 +23,7 @@ unsigned int carregaTextura(char* caminho){
     return idTextura;
 }
 
-void desenhaCena(GLuint textura, GLint raio, GLint divisoes)
-{
+void desenhaCena(GLuint textura, GLint raio, GLint divisoes){
     
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
@@ -32,11 +31,11 @@ void desenhaCena(GLuint textura, GLint raio, GLint divisoes)
 
     glMatrixMode(GL_MODELVIEW);
     
-        glColor3f(1, 1, 1);
-        glEnable(GL_TEXTURE_2D);
+    glColor3f(1, 1, 1);
+    glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textura);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glPolygonMode(GL_FRONT, GL_FILL);
         solidSphere(raio, divisoes, divisoes);
-        glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 }

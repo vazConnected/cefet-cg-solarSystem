@@ -38,4 +38,3 @@ void drawOrbits();
 void moveCelestials();
 
 #endif // _CELESTIAL_H_
-
