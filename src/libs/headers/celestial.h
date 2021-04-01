@@ -5,7 +5,7 @@
 enum orbes{mercury = 1, venus, earth, mars, jupiter, saturn, uranus, nepturne};
 enum naturalSatellites{moon = 1, phobos, deimos}; // Only Earth and Mars
 
-#define MAX_LADOS 40
+#define MAX_LADOS 60
 
 typedef struct{
     GLint orbitcx;
@@ -31,7 +31,7 @@ Celestial sun;
 
 void buildCelestial(Celestial* cel, int x, int y, int z, int rx, int ry,
                      int posx, int posy, int posz,
-                     int radius, float rot, float trans, char* caminho);
+                     int radius, float trans, char* caminho);
 void solidSphere(int radius, int stacks, int columns);
 void drawCelestials();
 void drawOrbits();

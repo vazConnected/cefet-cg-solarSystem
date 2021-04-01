@@ -24,13 +24,13 @@ unsigned int carregaTextura(char* caminho){
 }
 
 void desenhaCena(GLuint textura, GLint raio, GLint divisoes){
-    
+
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
     glScalef(1, 1, 1);
 
     glMatrixMode(GL_MODELVIEW);
-    
+
     glColor3f(1, 1, 1);
     glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textura);

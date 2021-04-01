@@ -11,7 +11,7 @@
 
 #define USEFUL_WIDTH 1280
 #define USEFUL_HEIGHT 720
-#define STANDARD_EYE_DISTANCE 2500
+#define STANDARD_EYE_DISTANCE 2100
 #define STANDARD_DEPTH_OF_VIEW 10000
 
 typedef struct{
@@ -25,6 +25,7 @@ GLfloat fov;
 
 bool orbit = false;
 bool move = false;
+bool light = true;
 
 char showPlanet;
 
@@ -32,11 +33,16 @@ void initialize(){
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	glEnable(GL_BLEND ); 
-    glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_BLEND );
+    glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glAlphaFunc(GL_GREATER, 0.5);
     glEnable(GL_ALPHA_TEST);
+
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
 
 	fov = 75;
 
@@ -54,25 +60,25 @@ void initialize(){
 
     // build celestials to draw
     // orbit center x, y and z, orbit radius x and z, position x, y and z, size, rotation e translation
-    buildCelestial(&sun, 0, 0, 0, 0, 0, 0, 200, 1, 150, 0, 0, "textures/2k_sun.jpg"); // build the sun
+    buildCelestial(&sun, 0, 0, 0, 0, 0, 0, 200, 1, 150, 0, "textures/2k_sun.jpg"); // build the sun
 
     // build the planets
-	buildCelestial(&planets[mercury - 1],   -50, 200, 1,  270,  210,  220, 200, 1, 20, 0, 1.0,  "textures/2k_mercury.jpg");
-	buildCelestial(&planets[venus - 1],     -50, 200, 1,  370,  360,  320, 200, 1, 30, 0, 0.9,  "textures/2k_venus_surface.jpg");
-	buildCelestial(&planets[earth - 1],     -40, 200, 1,  490,  510,  450, 200, 1, 50, 0, 0.6,  "textures/2k_earth_daymap.jpg");
-	buildCelestial(&planets[mars - 1],      -20, 200, 1,  620,  680,  600, 200, 1, 30, 0, 0.5,  "textures/2k_mars.jpg");
-	buildCelestial(&planets[jupiter - 1],   -10, 200, 1,  790,  810,  780, 200, 1, 90, 0, 0.4,  "textures/2k_jupiter.jpg");
-	buildCelestial(&planets[saturn - 1],    -10, 200, 1,  990,  960,  980, 200, 1, 75, 0, 0.25, "textures/2k_saturn.jpg");
-	buildCelestial(&planets[uranus - 1],    -20, 200, 1, 1210, 1140, 1190, 200, 1, 70, 0, 0.2,  "textures/2k_uranus.jpg");
-	buildCelestial(&planets[nepturne - 1], -150, 200, 1, 1450, 1250, 1300, 200, 1, 65, 0, 0.1,  "textures/2k_neptune.jpg");
+	buildCelestial(&planets[mercury - 1],   -50, 200, 1,  270,  210,  220, 200, 1, 20, 0.8, "textures/2k_mercury.jpg");
+	buildCelestial(&planets[venus - 1],     -50, 200, 1,  370,  360,  320, 200, 1, 25, 0.7, "textures/2k_venus_surface.jpg");
+	buildCelestial(&planets[earth - 1],     -40, 200, 1,  490,  510,  450, 200, 1, 40, 0.6, "textures/2k_earth_daymap.jpg");
+	buildCelestial(&planets[mars - 1],      -20, 200, 1,  620,  680,  600, 200, 1, 30, 0.5, "textures/2k_mars.jpg");
+	buildCelestial(&planets[jupiter - 1],   -10, 200, 1,  810,  850,  800, 200, 1, 75, 0.4, "textures/2k_jupiter.jpg");
+	buildCelestial(&planets[saturn - 1],    -10, 200, 1, 1040, 1000, 1030, 200, 1, 65, 0.3, "textures/2k_saturn.jpg");
+	buildCelestial(&planets[uranus - 1],    -20, 200, 1, 1260, 1170, 1240, 200, 1, 60, 0.2, "textures/2k_uranus.jpg");
+	buildCelestial(&planets[nepturne - 1], -150, 200, 1, 1530, 1350, 1380, 200, 1, 50, 0.1, "textures/2k_neptune.jpg");
 
 	// build earth's atmosphere
 	atmosphere = carregaTextura("textures/2k_earth_clouds.png");
 
     // build the satellites
-	buildCelestial(&satellites[moon - 1],   -40, 230, 1, 560, 510, 524, 230, 1, 15, 0, 0.6, "textures/2k_moon.jpg");
-	buildCelestial(&satellites[phobos - 1], -20, 220, 1, 660, 680, 636, 230, 1, 10, 0, 0.5, "textures/2k_eris_fictional.jpg");
-	buildCelestial(&satellites[deimos - 1], -20, 190, 1, 660, 680, 636, 170, 1, 10, 0, 0.5, "textures/2k_makemake_fictional.jpg");
+	buildCelestial(&satellites[moon - 1],   0, 0, 0, 60, 60, 510, 230, 1, 10, 0.4, "textures/2k_moon.jpg");
+	buildCelestial(&satellites[phobos - 1], 0, 0, 0, 50, 50, 650, 220, 1,  5, 0.3, "textures/2k_eris_fictional.jpg");
+	buildCelestial(&satellites[deimos - 1], 0, 0, 0, 50, 50, 650, 190, 1,  5, 0.3, "textures/2k_makemake_fictional.jpg");
 
     // Os valores foram aleatorios (tentativa e erro) muito chato ter que ficar trocando
 }
@@ -97,10 +103,36 @@ void camera(){
 	gluLookAt(lookAt.eye[0], lookAt.eye[1], lookAt.eye[2], lookAt.center[0], lookAt.center[1], lookAt.center[2], lookAt.up[0], lookAt.up[1], lookAt.up[2]);
 }
 
+void illumination(){
+        GLfloat luzDifusa[4] = {0.7, 0.7, 0.7, 1.0};
+        GLfloat luzEspecular[4] = {1.0, 1.0, 1.0, 1.0};
+        GLfloat especularidade[4] = {0.7, 0.6, 0.0, 1.0};
+        GLint especMaterial = 15;
+
+        glShadeModel(GL_SMOOTH);
+
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, especularidade);
+        glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, especMaterial);
+
+        GLfloat luzAmbiente[4] = {0.2, 0.2, 0.2, 1.0};
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
+
+        // ambient light
+        glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular);
+
+        // sun light
+        GLfloat lightPosition[4] = {sun.posx, sun.posy, sun.posz, 1.0};
+        GLfloat sunLight[4] = {0.7, 0.6, 0.0, 1.0};
+        glLightfv(GL_LIGHT1, GL_AMBIENT, luzAmbiente);
+        glLightfv(GL_LIGHT1, GL_SPECULAR, sunLight);
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, luzDifusa);
+        glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);
+}
+
 void callback_draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glColor3f(1.0f, 0.0f, 0.0f);
 
     drawCelestials();
 
@@ -111,6 +143,14 @@ void callback_draw(){
     if(move){
 		moveCelestials(); // move celestials only if desire
 	}
+
+	if(light){
+        glEnable(GL_LIGHT0);
+    }else{
+        glDisable(GL_LIGHT0);
+    }
+
+    illumination();
 
     if(showPlanet > 0 && showPlanet < nepturne){
         lookAt.eye[0] = planets[showPlanet - 1].posx - 2*planets[showPlanet - 1].radius;
@@ -183,7 +223,7 @@ void callback_keyboardDownFunc(unsigned char key, GLint x, GLint y){
             lookAt.center[2] = 0;
 			showPlanet = -1;
 		break;
-		case(' '): // side view
+		case(' '): // planet view
 			showPlanet++;
 			if(showPlanet > nepturne) showPlanet = 0;
 		break;
@@ -204,6 +244,10 @@ void callback_keyboardDownFunc(unsigned char key, GLint x, GLint y){
         case('m'):
         case('M'): // request to move (or not) the celestials
             move = !move;
+        break;
+        case('l'):
+        case('L'): // request to move (or not) the celestials
+            light = !light;
         break;
         case(27):
             exit(0);

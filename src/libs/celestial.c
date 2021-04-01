@@ -7,11 +7,10 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <time.h>
 
 void buildCelestial(Celestial* cel, int x, int y, int z, int rx, int rz,
                      int posx, int posy, int posz,
-                     int radius, float rot, float trans, char* caminho ){
+                     int radius, float trans, char* caminho ){
 
     cel->orbitcx = x;
     cel->orbitcy = y;
@@ -22,7 +21,7 @@ void buildCelestial(Celestial* cel, int x, int y, int z, int rx, int rz,
     cel->posy = posy;
     cel->posz = posz;
     cel->radius = radius;
-    cel->velRotation = rot;
+    cel->velRotation = 0;
     cel->velTranslation = trans;
     cel->restartT = 0.0;
     cel->textura = carregaTextura(caminho);
@@ -41,31 +40,17 @@ void solidSphere(int radius, int stacks, int columns){
 
 void drawCelestials(){
 
+    GLfloat sunLight[4] = {0.7, 0.6, 0.0, 1.0};
     // draw the sun
     glPushMatrix();
+        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, sunLight);
         glTranslated(sun.posx, sun.posy, sun.posz);
         glRotatef(sun.velRotation, 0, 1, 0);
         desenhaCena(sun.textura, sun.radius, 30);
     glPopMatrix();
-    
-    // draw the rings
-    for(int i = jupiter-1; i < nepturne; i++){
-        glPushMatrix();
-            if(i == nepturne - 1){
-                glRotatef(10, 0, 0, 1); // nepturne's move is inclined
-                glColor3f(1.0f, 1.0f, 1.0f);
-            }else if(i == saturn-1 ){
-                glColor3f(0.9f, 0.8f, 0.0f);
-            }else if(i == uranus-1 ){
-                glColor3f(0.0f, 0.8f, 0.9f);
-            }else{
-                glColor3f(0.9f, 0.5f, 0.0f);
-            }
-            glTranslatef(planets[i].posx,planets[i].posy, planets[i].posz-1);
-            glRotatef(planets[i].velRotation,1,1,1);
-            glutSolidTorus(5,(planets[i].radius)+20, 20, 40);
-        glPopMatrix();
-    }
+
+    GLfloat planetsLight[4] = {0.0, 0.0, 0.0, 0.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, planetsLight);
 
     // draw the planets
     for(int i = 0; i < nepturne; i++){
@@ -94,6 +79,28 @@ void drawCelestials(){
             desenhaCena(satellites[i].textura, satellites[i].radius, 30);
         glPopMatrix();
     }
+
+    // draw the rings
+    GLint especMaterial = 100;
+    glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, especMaterial);
+    for(int i = jupiter-1; i < nepturne; i++){
+        glPushMatrix();
+            if(i == nepturne - 1){
+                glRotatef(10, 0, 0, 1); // nepturne's move is inclined
+                glColor3f(1.0f, 1.0f, 1.0f);
+            }else if(i == saturn-1 ){
+                glColor3f(0.9f, 0.8f, 0.0f);
+            }else if(i == uranus-1 ){
+                glColor3f(0.0f, 0.8f, 0.9f);
+            }else{
+                glColor3f(0.9f, 0.5f, 0.0f);
+            }
+            glTranslatef(planets[i].posx,planets[i].posy, planets[i].posz-1);
+            glRotatef(planets[i].velRotation, 0, 1, 0);
+            glRotatef(90, 1, 0, 0);
+            glutSolidTorus(5,(planets[i].radius)+20, 20, 40);
+        glPopMatrix();
+    }
 }
 
 void drawOrbits(){
@@ -102,7 +109,6 @@ void drawOrbits(){
     glPushMatrix();
     for(int i = 0; i < nepturne; i++){
         float angulo;
-        glColor3f(0.15*i, 0.0f, 1.0f);
         if( i == nepturne - 1) glRotatef(10, 0, 0, 1); // nepturne's move is inclined
         // make an ellipse or a circle
         glBegin(GL_LINE_LOOP);
@@ -119,17 +125,18 @@ void drawOrbits(){
     // satellites
     for(int i = 0; i < deimos; i++){
         float angulo;
-        glColor3f(0.15*i, 0.0f, 1.0f);
         // indicates which planet corresponds to the satellite
         int k = 2;
-        if(i > moon - 1) k = 3;
+        if(i > moon - 1){
+            k = 3;
+        }
         // make an ellipse or a circle
         glBegin(GL_LINE_LOOP);
             for (int j = 0; j <= MAX_LADOS; ++j) {
                 angulo = 2 * M_PI * j / MAX_LADOS;
-                glVertex3f(planets[k].posx + cos(angulo)*(planets[k].radius+12*k),
-                           satellites[i].orbitcy,
-                           planets[k].posz + sin(angulo)*(planets[k].radius+12*k));
+                glVertex3f(planets[k].posx + cos(angulo)*satellites[i].orbitrx,
+                           satellites[i].posy,
+                           planets[k].posz + sin(angulo)*satellites[i].orbitrz);
             }
         glEnd();
     }
@@ -160,11 +167,11 @@ void moveCelestials(){
         if(i > moon - 1){
             k = 3;
         }
-        // calculate the moviment
+        // calculate the movement
         float angulo;
         angulo = 2 * 2 * M_PI * (satellites[i].restartT) / MAX_LADOS;
-        satellites[i].posx = planets[k].posx + cos(angulo)*(planets[k].radius+12*k);
-        satellites[i].posz = planets[k].posz + sin(angulo)*(planets[k].radius+12*k);
+        satellites[i].posx = planets[k].posx + cos(angulo)*satellites[i].orbitrx;
+        satellites[i].posz = planets[k].posz + sin(angulo)*satellites[i].orbitrz;
         satellites[i].restartT += satellites[i].velTranslation;
         if(satellites[i].restartT > MAX_LADOS){
             satellites[i].restartT = 0;
