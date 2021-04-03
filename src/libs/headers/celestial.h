@@ -31,10 +31,10 @@ Celestial sun;
 
 void buildCelestial(Celestial* cel, int x, int y, int z, int rx, int ry,
                      int posx, int posy, int posz,
-                     int radius, float trans, char* caminho);
-void solidSphere(int radius, int stacks, int columns);
-void drawCelestials();
-void drawOrbits();
-void moveCelestials();
+                     int radius, float trans, char* caminho); // define valores dos corpos celestiais
+void solidSphere(int radius, int stacks, int columns); // desenha esferas passiveis de serem texturizadas
+void drawCelestials(); // desenha os corpos celestiais nas suas respectivas posicoes e com suas determinadas iluminacoes
+void drawOrbits(); // desenha as orbitas dos astros
+void moveCelestials(); // rotaciona o sol e todos os astros, translada os astros em torno do sol e os satelites em torno de seus respectivos planetas
 
 #endif // _CELESTIAL_H_
