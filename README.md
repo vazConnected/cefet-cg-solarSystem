@@ -10,6 +10,25 @@ Para compilar e executar o projeto é necessário instalar os seguintes recursos
 
 Após instalar os recursos, basta executar o arquivo `cg-solarSystem.sh`, localizado na raiz do repositório. Para isso, é necessário permitir a execução do stript executando o comando `chmod +x cg-solarSystem.sh` no terminal.
 
+## Controles/interações
+- <kbd>1</kbd> : visão superior;
+- <kbd>2</kbd> : visão lateral;
+- <kbd>SPACE</kbd> : vizualização com proximidade;
+- <kbd>R</kbd> : visão cinematográfica;
+- <kbd>O</kbd> : ativar ou desativar órbitas;
+- <kbd>M</kbd> : ativar ou desativar a movimentação dos astros;
+- <kbd>L</kbd> : modificar a iluminação do sistem solar;
+- <kbd>ESC</kbd> : fechar simulação.
+
+## Adicionais implementados
+- Reshape;
+- Órbitas não circulares;
+- Modo de órbitas visíveis;
+- Atmosferas;
+- Anéis planetários;
+- Satélites naturais;
+- Tour pelos planetas.
+
 ## Créditos
 - Devs: [Luísa Oliveira](https://github.com/luisaoliveira), [Pedro Vaz](https://github.com/vazConnected) e [Stéphanie Fonseca](https://github.com/steponnie);
 - Prof.: [Glender Brás](https://github.com/glenderbras);
