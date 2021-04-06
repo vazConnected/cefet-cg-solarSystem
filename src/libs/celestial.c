@@ -41,7 +41,7 @@ void solidSphere(int radius, int stacks, int columns){
 void drawCelestials(){
 
     GLfloat sunLight[4] = {0.7, 0.6, 0.0, 1.0};
-    // draw the sun
+    // desenha o sol
     glPushMatrix();
         glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, sunLight);
         glTranslated(sun.posx, sun.posy, sun.posz);
@@ -52,11 +52,11 @@ void drawCelestials(){
     GLfloat planetsLight[4] = {0.0, 0.0, 0.0, 0.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, planetsLight);
 
-    // draw the planets
+    // desenha os planetas
     for(int i = 0; i < nepturne; i++){
         glPushMatrix();
             if(i == nepturne - 1){
-                glRotatef(10, 0, 0, 1); // nepturne's move is inclined
+                glRotatef(10, 0, 0, 1); // o movimento de Netuno eh inclinado
             }
             glTranslatef(planets[i].posx, planets[i].posy, planets[i].posz);
             glRotatef(planets[i].velRotation, 0, 1, 0);
@@ -64,14 +64,14 @@ void drawCelestials(){
         glPopMatrix();
     }
 
-    // draw atmosphere
+    // desenha atmosfera
     glPushMatrix();
         glTranslated(planets[earth-1].posx, planets[earth-1].posy, planets[earth-1].posz);
         glRotatef(planets[earth-1].velRotation, 0, 1, 1);
         desenhaCena(atmosphere, planets[earth-1].radius+5, 30);
     glPopMatrix();
 
-    // draw the satellites
+    // desenha satelites
     for(int i = 0; i < deimos; i++){
         glPushMatrix();
             glTranslatef(satellites[i].posx, satellites[i].posy, satellites[i].posz);
@@ -80,13 +80,13 @@ void drawCelestials(){
         glPopMatrix();
     }
 
-    // draw the rings
+    // desenha aneis de Saturno, Jupiter, Urano, Netuno
     GLint especMaterial = 100;
     glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, especMaterial);
     for(int i = jupiter-1; i < nepturne; i++){
         glPushMatrix();
             if(i == nepturne - 1){
-                glRotatef(10, 0, 0, 1); // nepturne's move is inclined
+                glRotatef(10, 0, 0, 1); // o movimento de Netuno eh inclinado
                 glColor3f(1.0f, 1.0f, 1.0f);
             }else if(i == saturn-1 ){
                 glColor3f(0.9f, 0.8f, 0.0f);
@@ -105,11 +105,11 @@ void drawCelestials(){
 
 void drawOrbits(){
 
-    // planets
+    // desenha orbita dos planetas
     glPushMatrix();
     for(int i = 0; i < nepturne; i++){
         float angulo;
-        if( i == nepturne - 1) glRotatef(10, 0, 0, 1); // nepturne's move is inclined
+        if( i == nepturne - 1) glRotatef(10, 0, 0, 1); // o movimento de Netuno eh inclinado
         // make an ellipse or a circle
         glBegin(GL_LINE_LOOP);
             for (int k = 0; k <= MAX_LADOS; ++k) {
@@ -122,15 +122,15 @@ void drawOrbits(){
     }
     glPopMatrix();
 
-    // satellites
+    // desenha orbita dos satelites
     for(int i = 0; i < deimos; i++){
         float angulo;
-        // indicates which planet corresponds to the satellite
+        // indica qual planeta corresponde ao satelite
         int k = 2;
         if(i > moon - 1){
             k = 3;
         }
-        // make an ellipse or a circle
+        // desenha elipse ou circulo
         glBegin(GL_LINE_LOOP);
             for (int j = 0; j <= MAX_LADOS; ++j) {
                 angulo = 2 * M_PI * j / MAX_LADOS;
@@ -144,7 +144,7 @@ void drawOrbits(){
 
 void moveCelestials(){
 
-    // planets are translated and rotated
+    // planetas sao transladados e rotacionados
     for(int i = 0; i < nepturne; i++){
         float angulo;
         angulo = 2 * M_PI * planets[i].restartT / MAX_LADOS;
@@ -160,14 +160,14 @@ void moveCelestials(){
         }
     }
 
-    // satellites are translated and rotated
+    // satelites sao transladados e rotacionados
     for(int i = 0; i < deimos; i++){
-        // indicates which planet corresponds to the satellite
+        // indica qual planeta corresponde ao satelite
         int k = 2;
         if(i > moon - 1){
             k = 3;
         }
-        // calculate the movement
+        // calcula o movimento
         float angulo;
         angulo = 2 * 2 * M_PI * (satellites[i].restartT) / MAX_LADOS;
         satellites[i].posx = planets[k].posx + cos(angulo)*satellites[i].orbitrx;
@@ -182,7 +182,7 @@ void moveCelestials(){
         }
     }
 
-    // the sun is only rotated
+    // o Sol eh o unico rotacionado
     sun.velRotation += 5;
     if(sun.velRotation > 360) sun.velRotation = 0;
 }
