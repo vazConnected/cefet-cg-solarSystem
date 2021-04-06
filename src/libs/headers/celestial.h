@@ -1,9 +1,9 @@
 #ifndef _CELESTIAL_H_
 #define _CELESTIAL_H_
 
-// Source: en.wikipedia.org/wiki/List_of_natural_satellites
+// Referencia: en.wikipedia.org/wiki/List_of_natural_satellites
 enum orbes{mercury = 1, venus, earth, mars, jupiter, saturn, uranus, nepturne};
-enum naturalSatellites{moon = 1, phobos, deimos}; // Only Earth and Mars
+enum naturalSatellites{moon = 1, phobos, deimos}; // Apenas da Terra e Marte
 
 #define MAX_LADOS 60
 
