@@ -4,7 +4,7 @@ Projeto de simulação do Sistema Solar, desenvolvido em C e OpenGL com a biblio
 ## Capturas de tela
 | Visão Cinematográfica | Visão Terra-Lua | Visão Superior |
 |:-------------------------------:|:----------------------:|:----------------------------:|
-|![visao-cinematografica](docs/visao-cinematografica.png) | ![visao-terra-lua](docs/visao-terra-lua.jpg) | ![visao-superior](docs/visao-superior.jpg) |
+|![visao-cinematografica](docs/visao-cinematografica.png) | ![visao-terra-lua](docs/visao-terra-lua.png) | ![visao-superior](docs/visao-superior.png) |
 
 ## Preparando o Ambiente de Execução
 Para compilar e executar o projeto é necessário instalar os seguintes recursos:
