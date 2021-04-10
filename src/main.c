@@ -118,7 +118,7 @@ void illumination(){
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, especularidade);
         glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, especMaterial);
 
-        GLfloat luzAmbiente[4] = {0.02, 0.02, 0.02, 1.0};
+        GLfloat luzAmbiente[4] = {0.2, 0.2, 0.2, 1.0};
         glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
 
         // Luz ambiente

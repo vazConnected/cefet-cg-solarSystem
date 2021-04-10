@@ -1,6 +1,11 @@
 # Sistema Solar
 Projeto de simulação do Sistema Solar, desenvolvido em C e OpenGL com a biblioteca FreeGLUT para disciplina Computação Gráfica do [Cefet-MG](https://cefetmg.br).
 
+## Capturas de tela
+| Visão Cinematográfica | Visão Terra-Lua | Visão Superior |
+|:-------------------------------:|:----------------------:|:----------------------------:|
+|![visao-cinematografica](docs/visao-cinematografica.png) | ![visao-terra-lua](docs/visao-terra-lua.jpg) | ![visao-superior](docs/visao-superior.jpg) |
+
 ## Preparando o Ambiente de Execução
 Para compilar e executar o projeto é necessário instalar os seguintes recursos:
 - GCC: `sudo apt install gcc`
