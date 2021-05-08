@@ -25,15 +25,6 @@ Após instalar os recursos, basta executar o arquivo `cg-solarSystem.sh`, locali
 - <kbd>L</kbd> : modificar a iluminação do sistem solar;
 - <kbd>ESC</kbd> : fechar simulação.
 
-## Adicionais implementados
-- Reshape;
-- Órbitas não circulares;
-- Modo de órbitas visíveis;
-- Atmosferas;
-- Anéis planetários;
-- Satélites naturais;
-- Tour pelos planetas.
-
 ## Créditos
 - Devs: [Luísa Oliveira](https://github.com/luisaoliveira), [Pedro Vaz](https://github.com/vazConnected) e [Stéphanie Fonseca](https://github.com/steponnie);
 - Prof.: [Glender Brás](https://github.com/glenderbras);
